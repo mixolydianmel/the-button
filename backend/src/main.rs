@@ -1,6 +1,10 @@
 #[macro_use]
 extern crate rocket;
 
+pub mod cors;
+
+use cors::CORS;
+
 use std::{
     cmp::Ordering,
     path::{Path, PathBuf},
@@ -88,4 +92,5 @@ async fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![index, get_file])
         .mount("/api", routes![latest_click, update_click])
+        .attach(CORS)
 }
