@@ -1,5 +1,4 @@
 pub mod components;
-pub mod model;
 
 use components::app::App;
 
