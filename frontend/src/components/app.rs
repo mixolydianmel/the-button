@@ -5,8 +5,8 @@ use yew::prelude::*;
 pub fn app() -> Html {
     html! {
         <div class="container">
-            <Button endpoint={"http://0.0.0.0:8080/api/click"}/>
-            <Timer endpoint={"http://0.0.0.0:8080/api/latest"}/>
+            <Button endpoint={"http://66.228.35.230:80/api/click"}/>
+            <Timer endpoint={"http://66.228.35.230:80/api/latest"}/>
             <footer>
                 { "Made with ❤ by " }
                 <a href="https://github.com/mixolydianmel">
