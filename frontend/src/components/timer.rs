@@ -45,7 +45,7 @@ impl Component for Timer {
                         Err(e) => panic!("{}", e),
                     };
 
-                    let time: DateTime<Utc> = Datetime::from(txt.replace("\"", "").as_str()).into();
+                    let time: DateTime<Utc> = Datetime::from(txt.replace('"', "").as_str()).into();
 
                     TimerMsg::Update(time)
                 });
@@ -61,11 +61,11 @@ impl Component for Timer {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
             <p class="time">
-                { format!("{} days, {} hours, {} minutes, and {} seconds",
-                          self.duration.num_days(),
-                          self.duration.num_hours() % 24,
-                          self.duration.num_minutes() % 60,
-                          self.duration.num_seconds() % 60) }
+            { format!("{} days, {} hours, {} minutes, and {} seconds",
+                      self.duration.num_days(),
+                      self.duration.num_hours() % 24,
+                      self.duration.num_minutes() % 60,
+                      self.duration.num_seconds() % 60) }
             </p>
         }
     }
