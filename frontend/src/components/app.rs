@@ -25,8 +25,11 @@ use yew::prelude::*;
 pub fn app() -> Html {
     html! {
         <div class="container">
-            <h1>{ "So long" }</h1>
+            <h1 style="font-size: 48pt;">{ "So long" }</h1>
             <h3>{ "It's been a wild ride. Check out the project on " } <a href="http://github.com/mixolydianmel/the-button">{ "github" }</a>{ "." }</h3>
+            <footer>
+            <a href="https://ko-fi.com/mixolydian"><img src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_tag_white.png?" alt="Support me on Ko-Fi" style="width: 50%; border: 5px solid black;"/></a>
+            </footer>
         </div>
     }
 }
