@@ -2,37 +2,37 @@ use chrono::Duration;
 use gloo_timers::callback::Interval;
 use yew::prelude::*;
 
-pub enum HighScoreMsg {
+pub enum TimeMsg {
     Tick,
     Update(Duration),
 }
 
 #[derive(PartialEq, Properties)]
-pub struct HighScoreProps {
+pub struct TimeProps {
     pub name: String,
     pub endpoint: String,
 }
 
-pub struct HighScore {
+pub struct Time {
     _interval: Interval,
     duration: Duration,
 }
 
-impl Component for HighScore {
-    type Message = HighScoreMsg;
-    type Properties = HighScoreProps;
+impl Component for Time {
+    type Message = TimeMsg;
+    type Properties = TimeProps;
 
     fn create(ctx: &Context<Self>) -> Self {
         let link = ctx.link().clone();
-        HighScore {
-            _interval: Interval::new(10 * 1_100, move || link.send_message(HighScoreMsg::Tick)),
+        Time {
+            _interval: Interval::new(10 * 1_100, move || link.send_message(TimeMsg::Tick)),
             duration: Duration::zero(),
         }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            HighScoreMsg::Tick => {
+            TimeMsg::Tick => {
                 let endpoint = ctx.props().endpoint.clone();
                 ctx.link().send_future(async {
                     let res = match reqwest::get(endpoint).await {
@@ -48,11 +48,11 @@ impl Component for HighScore {
 
                     let duration: Duration = Duration::seconds(duration.parse().unwrap_or(0));
 
-                    HighScoreMsg::Update(duration)
+                    TimeMsg::Update(duration)
                 });
                 true
             }
-            HighScoreMsg::Update(d) => {
+            TimeMsg::Update(d) => {
                 self.duration = d;
                 true
             }
@@ -64,7 +64,7 @@ impl Component for HighScore {
             return;
         }
 
-        ctx.link().send_message(HighScoreMsg::Tick);
+        ctx.link().send_message(TimeMsg::Tick);
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {

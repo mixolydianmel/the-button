@@ -31,7 +31,7 @@ use itertools::Itertools;
 static DB: Surreal<Client> = Surreal::init();
 const DATABASE_URL: &str = "localhost:8000";
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct ClickEvent {
     id: Thing,
     time: Datetime,
@@ -129,6 +129,40 @@ async fn high_score() -> Result<Value, NotFound<String>> {
     }
 }
 
+#[get("/prev_time")]
+async fn prev_time() -> Result<Value, NotFound<String>> {
+    let result = DB
+        .query("SELECT * FROM clickevent ORDER BY time DESC LIMIT 2")
+        .await;
+
+    println!("Result: {:?}", result);
+
+    let times: Vec<Datetime> = match result {
+        Ok(mut n) => {
+            n.take(0).unwrap()
+        },
+        Err(_) => {
+            return Err(NotFound(String::from("Error querying DB")));
+        },
+    };
+
+    println!("Times: {:?}", times);
+
+    let times: Vec<DateTime<Utc>> = times
+        .iter()
+        .map(|c| {
+            DateTime::<Utc>::from_utc(
+                NaiveDateTime::from_timestamp_micros(c.timestamp_micros()).unwrap(),
+                Utc,
+            )
+        })
+        .collect();
+
+    println!("Times: {:?}", times);
+
+    Ok(json!(0))
+}
+
 #[launch]
 async fn rocket() -> _ {
     DB.connect::<Http>(DATABASE_URL).await.unwrap();
@@ -143,6 +177,6 @@ async fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![index, get_file])
         .mount("/api", routes![latest_click, update_click])
-        .mount("/api/data", routes![total_clicks, high_score])
+        .mount("/api/data", routes![total_clicks, high_score, prev_time])
         .attach(CORS)
 }
