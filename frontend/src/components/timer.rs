@@ -14,7 +14,7 @@ pub struct TimerProps {
 }
 
 pub struct Timer {
-    duration: Duration,
+    duration: chrono::Duration,
     _interval: Interval,
 }
 
